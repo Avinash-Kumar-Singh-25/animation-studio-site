@@ -1,0 +1,5 @@
+KittenTTS nano 0.8 (int8): Apache-2.0, https://huggingface.co/KittenML/kitten-tts-nano-0.8-int8
+onnxruntime-web: MIT, https://github.com/microsoft/onnxruntime
+phonemizer (eSpeak NG compiled to WebAssembly): eSpeak NG is GPL-3.0, https://github.com/espeak-ng/espeak-ng
+
+Graphics library: MIT licence, Copyright © 2010-2025 three.js authors, https://github.com/mrdoob/three.js/blob/dev/LICENSE

@@ -1,0 +1,8 @@
+# Never serve project files even if a deploy publishes the wrong folder.
+/*.md          /404  404!
+/*.ts          /404  404!
+/*.map         /404  404!
+/.env*         /404  404!
+/.git/*        /404  404!
+/_headers      /404  404!
+/_redirects    /404  404!

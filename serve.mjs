@@ -103,6 +103,20 @@ http
       const size = fs.statSync(file).size;
       const accept = String(req.headers['accept-encoding'] ?? '');
       const enc = COMPRESS.has(ext) ? (/\bbr\b/.test(accept) ? 'br' : /\bgzip\b/.test(accept) ? 'gzip' : null) : null;
+      // files compressed ahead of time (file.br / file.gz) are sent as they are
+      const pre = enc && fs.existsSync(`${file}.${enc === 'br' ? 'br' : 'gz'}`) ? `${file}.${enc === 'br' ? 'br' : 'gz'}` : null;
+      if (pre) {
+        const n = fs.statSync(pre).size;
+        res.writeHead(200, { ...headers, 'content-encoding': enc, 'content-length': n });
+        if (req.method === 'HEAD') return res.end();
+        return void fs.createReadStream(pre).pipe(res);
+      }
+      if (enc && size > 2_000_000) {
+        // large files without a compressed copy go out as they are rather than tie up the server
+        res.writeHead(200, { ...headers, 'accept-ranges': 'bytes', 'content-length': size });
+        if (req.method === 'HEAD') return res.end();
+        return void fs.createReadStream(file).pipe(res);
+      }
       if (enc) {
         const key = `${file}:${enc}`;
         if (!compressed.has(key)) {
